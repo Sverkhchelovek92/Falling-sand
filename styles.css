@@ -1,0 +1,18 @@
+body {
+  margin: 0;
+  background: #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+canvas {
+  width: 90vw;
+  height: 90vh;
+  background: #222;
+  border: 1px solid #444;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
