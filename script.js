@@ -15,6 +15,14 @@ let cols, rows
 let grid
 let nextGrid
 
+let imageData
+let buffer
+
+function createImageData() {
+  imageData = ctx.createImageData(cols * CELL_SIZE, rows * CELL_SIZE)
+  buffer = new Uint32Array(imageData.data.buffer)
+}
+
 function initGrid() {
   cols = Math.floor(canvas.width / CELL_SIZE)
   rows = Math.floor(canvas.height / CELL_SIZE)
