@@ -14,3 +14,19 @@ let cols, rows
 
 let grid
 let nextGrid
+
+function initGrid() {
+  cols = Math.floor(canvas.width / CELL_SIZE)
+  rows = Math.floor(canvas.height / CELL_SIZE)
+
+  grid = create2Darray(cols, rows)
+  nextGrid = create2Darray(cols, rows)
+}
+
+function create2Darray(w, h) {
+  const arr = new Array(w)
+  for (let x = 0; x < w; x++) {
+    arr[x] = new Array(h).fill(0)
+  }
+  return arr
+}
