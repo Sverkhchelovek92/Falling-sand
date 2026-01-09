@@ -23,6 +23,11 @@ function createImageData() {
   buffer = new Uint32Array(imageData.data.buffer)
 }
 
+const COLORS = {
+  0: 0xff222222,
+  1: 0xff00b7eb,
+}
+
 function initGrid() {
   cols = Math.floor(canvas.width / CELL_SIZE)
   rows = Math.floor(canvas.height / CELL_SIZE)
