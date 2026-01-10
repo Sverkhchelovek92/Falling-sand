@@ -1,15 +1,8 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
-function resizeCanvas() {
-  canvas.width = canvas.clientWidth
-  canvas.height = canvas.clientHeight
-}
-
-resizeCanvas()
-window.addEventListener('resize', resizeCanvas)
-
 const CELL_SIZE = 4
+
 let cols, rows
 
 let grid
@@ -18,14 +11,27 @@ let nextGrid
 let imageData
 let buffer
 
-function createImageData() {
-  imageData = ctx.createImageData(cols * CELL_SIZE, rows * CELL_SIZE)
-  buffer = new Uint32Array(imageData.data.buffer)
-}
-
 const COLORS = {
   0: 0xff222222,
   1: 0xff00b7eb,
+}
+
+function resizeCanvas() {
+  canvas.width = canvas.clientWidth
+  canvas.height = canvas.clientHeight
+
+  initGrid()
+  createImageData()
+}
+
+resizeCanvas()
+window.addEventListener('resize', () => {
+  resizeCanvas()
+})
+
+function createImageData() {
+  imageData = ctx.createImageData(cols * CELL_SIZE, rows * CELL_SIZE)
+  buffer = new Uint32Array(imageData.data.buffer)
 }
 
 function initGrid() {
@@ -69,3 +75,19 @@ function render() {
   }
   ctx.putImageData(imageData, 0, 0)
 }
+
+function init() {
+  resizeCanvas()
+
+  // Test
+  for (let x = Math.floor(cols / 2) - 10; x < Math.floor(cols / 2) + 10; x++) {
+    for (let y = 10; y < 30; y++) {
+      if (x >= 0 && x < cols && y >= 0 && y < rows) {
+        grid[x][y] = 1
+      }
+    }
+  }
+  render()
+}
+
+init()
