@@ -43,3 +43,29 @@ function create2Darray(w, h) {
   }
   return arr
 }
+
+function render() {
+  buffer.fill(COLORS[0])
+
+  for (let x = 0; x < cols; x++) {
+    for (let y = 0; y < rows; y++) {
+      const cell = grid[x][y]
+      if (cell === 0) continue
+
+      const color = COLORS[cell]
+
+      const startX = x * CELL_SIZE
+      const startY = y * CELL_SIZE
+
+      for (let dx = 0; dx < CELL_SIZE; dx++) {
+        for (let dy = 0; dy < CELL_SIZE; dy++) {
+          const px = startX + dx
+          const py = startY + dy
+          const index = py * (cols * CELL_SIZE) + px
+          buffer[index] = color
+        }
+      }
+    }
+  }
+  ctx.putImageData(imageData, 0, 0)
+}
