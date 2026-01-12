@@ -117,7 +117,7 @@ function update() {
             if (
               !moved &&
               y + 1 < rows &&
-              mx >= 0 &&
+              nx >= 0 &&
               nx < cols &&
               nextGrid[nx][y + 1] === 0
             ) {
