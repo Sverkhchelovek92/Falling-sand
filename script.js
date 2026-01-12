@@ -16,14 +16,6 @@ const COLORS = {
   1: 0xff00b7eb,
 }
 
-// function resizeCanvas() {
-//   canvas.width = canvas.clientWidth
-//   canvas.height = canvas.clientHeight
-
-//   initGrid()
-//   createImageData()
-// }
-
 function resizeAndInit() {
   canvas.width = canvas.clientWidth
   canvas.height = canvas.clientHeight
@@ -45,10 +37,8 @@ function resizeAndInit() {
   render()
 }
 
-// resizeCanvas()
-resizeAndInit()
+// resizeAndInit()
 window.addEventListener('resize', () => {
-  // resizeCanvas()
   resizeAndInit()
 })
 
@@ -144,24 +134,11 @@ function update() {
   ;[grid, nextGrid] = [nextGrid, grid]
 }
 
-// function init() {
-//   resizeCanvas()
-
-//   // Test
-//   for (let x = Math.floor(cols / 2) - 10; x < Math.floor(cols / 2) + 10; x++) {
-//     for (let y = 10; y < 30; y++) {
-//       if (x >= 0 && x < cols && y >= 0 && y < rows) {
-//         grid[x][y] = 1
-//       }
-//     }
-//   }
-//   render()
-// }
-
-// init()
-
 function loop() {
   update()
   render()
   requestAnimationFrame(loop)
 }
+
+resizeAndInit()
+requestAnimationFrame(loop)
