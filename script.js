@@ -76,6 +76,51 @@ function render() {
   ctx.putImageData(imageData, 0, 0)
 }
 
+function update() {
+  // let's copy grid to nextGrid
+  for (let x = 0; x < cols; x++) {
+    nextGrid[x].fill(0)
+    for (let y = 0; y < rows; y++) {
+      nextGrid[x][y] = grid[x][y]
+    }
+  }
+
+  // Update from bottom to top
+  for (let x = 0; x < cols; x++) {
+    for (let y = rows - 2; y >= 0; y--) {
+      if (grid[x][y] === 1) {
+        let moved = false
+
+        if (y + 1 < rows && nextGrid[x][y + 1] === 0) {
+          nextGrid[x][y + 1] = 1
+          nextGrid[x][y] = 0
+          moved = true
+        } else {
+          const leftFirst = Math.random() < 0.5
+          const directions = leftFirst ? [-1, 1] : [1, -1]
+
+          for (const dir of directions) {
+            const nx = x + dir
+            if (
+              !moved &&
+              y + 1 < rows &&
+              mx >= 0 &&
+              nx < cols &&
+              nextGrid[nx][y + 1] === 0
+            ) {
+              nextGrid[nx][y + 1] = 1
+              nextGrid[x][y] = 0
+              moved = true
+              break
+            }
+          }
+        }
+      }
+    }
+  }
+  ;[grid, nextGrid] = [nextGrid, grid]
+}
+
 function init() {
   resizeCanvas()
 
