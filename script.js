@@ -16,17 +16,40 @@ const COLORS = {
   1: 0xff00b7eb,
 }
 
-function resizeCanvas() {
+// function resizeCanvas() {
+//   canvas.width = canvas.clientWidth
+//   canvas.height = canvas.clientHeight
+
+//   initGrid()
+//   createImageData()
+// }
+
+function resizeAndInit() {
   canvas.width = canvas.clientWidth
   canvas.height = canvas.clientHeight
 
   initGrid()
   createImageData()
+
+  // Тестовый песок — теперь grid точно существует
+  const startX = Math.floor(cols / 2 - 10)
+  const endX = Math.floor(cols / 2 + 10)
+  for (let x = startX; x < endX; x++) {
+    for (let y = 10; y < 20; y++) {
+      if (x >= 0 && x < cols && y >= 0 && y < rows) {
+        grid[x][y] = 1
+      }
+    }
+  }
+
+  render()
 }
 
-resizeCanvas()
+// resizeCanvas()
+resizeAndInit()
 window.addEventListener('resize', () => {
-  resizeCanvas()
+  // resizeCanvas()
+  resizeAndInit()
 })
 
 function createImageData() {
@@ -121,18 +144,24 @@ function update() {
   ;[grid, nextGrid] = [nextGrid, grid]
 }
 
-function init() {
-  resizeCanvas()
+// function init() {
+//   resizeCanvas()
 
-  // Test
-  for (let x = Math.floor(cols / 2) - 10; x < Math.floor(cols / 2) + 10; x++) {
-    for (let y = 10; y < 30; y++) {
-      if (x >= 0 && x < cols && y >= 0 && y < rows) {
-        grid[x][y] = 1
-      }
-    }
-  }
+//   // Test
+//   for (let x = Math.floor(cols / 2) - 10; x < Math.floor(cols / 2) + 10; x++) {
+//     for (let y = 10; y < 30; y++) {
+//       if (x >= 0 && x < cols && y >= 0 && y < rows) {
+//         grid[x][y] = 1
+//       }
+//     }
+//   }
+//   render()
+// }
+
+// init()
+
+function loop() {
+  update()
   render()
+  requestAnimationFrame(loop)
 }
-
-init()
