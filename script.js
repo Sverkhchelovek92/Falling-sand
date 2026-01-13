@@ -1,6 +1,24 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
+canvas.addEventListener('mousedown', (e) => {
+  isDrawing = true
+  drawAtMouse(e)
+})
+
+canvas.addEventListener('mousemove', (e) => {
+  if (isDrawing) {
+    drawAtMouse(e)
+  }
+})
+
+canvas.addEventListener('mouseup', () => {
+  isDrawing = false
+})
+canvas.addEventListener('mouseleave', () => {
+  isDrawing = false
+})
+
 const CELL_SIZE = 4
 
 let cols, rows
