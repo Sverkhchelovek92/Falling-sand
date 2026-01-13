@@ -16,6 +16,10 @@ const COLORS = {
   1: 0xff00b7eb,
 }
 
+let isDrawing = false
+let brushSize = 8
+let currentMaterial = 1
+
 function resizeAndInit() {
   canvas.width = canvas.clientWidth
   canvas.height = canvas.clientHeight
@@ -23,7 +27,7 @@ function resizeAndInit() {
   initGrid()
   createImageData()
 
-  // Тестовый песок — теперь grid точно существует
+  // Test sand
   const startX = Math.floor(cols / 2 - 10)
   const endX = Math.floor(cols / 2 + 10)
   for (let x = startX; x < endX; x++) {
