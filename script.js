@@ -35,7 +35,7 @@ const COLORS = {
 }
 
 let isDrawing = false
-let brushSize = 8
+let brushSize = 4
 let currentMaterial = 1
 
 function resizeAndInit() {
@@ -154,6 +154,29 @@ function update() {
     }
   }
   ;[grid, nextGrid] = [nextGrid, grid]
+}
+
+function drawAtMouse(e) {
+  const rect = canvas.getBoundingClientRect()
+  const mouseX = e.clientX - rect.left
+  const mouseY = e.clientY - rect.top
+
+  // pixels to coordinates
+  const cellX = Math.floor(mouseX / CELL_SIZE)
+  const cellY = Math.floor(mouseY / CELL_SIZE)
+
+  // let's draw
+  for (let dx = -brushSize; dx <= brushSize; dx++) {
+    for (let dy = -brushSize; dy <= brushSize; dy++) {
+      if (dx * dx + dy * dy <= brushSize * brushSize) {
+        const x = cellX + dx
+        const y = cellY + dy
+        if (x >= 0 && x < cols && y >= 0 && y < rows) {
+          grid[x][y] = currentMaterial
+        }
+      }
+    }
+  }
 }
 
 function loop() {
