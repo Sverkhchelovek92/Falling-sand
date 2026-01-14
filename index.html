@@ -7,7 +7,55 @@
     <title>Falling Sand Simulator</title>
   </head>
   <body>
-    <canvas id="canvas"></canvas>
+    <div id="app-container">
+      <div id="sidebar">
+        <h3>Settings</h3>
+
+        <div class="section">
+          <label>Brush size</label>
+          <input
+            type="range"
+            id="brush-slider"
+            min="2"
+            max="40"
+            value="10"
+            step="1"
+          />
+          <span id="brush-value">10</span> px
+        </div>
+
+        <div class="section">
+          <label>Sand color</label>
+          <div class="colors">
+            <div
+              class="color"
+              data-color="0xFFC2B080"
+              style="background: #c2b080"
+            ></div>
+            <div
+              class="color"
+              data-color="0xFFD4A76A"
+              style="background: #d4a76a"
+            ></div>
+            <div
+              class="color"
+              data-color="0xFFAA8F5A"
+              style="background: #aa8f5a"
+            ></div>
+            <div
+              class="color"
+              data-color="0xFF8B6914"
+              style="background: #8b6914"
+            ></div>
+          </div>
+        </div>
+
+        <button id="clear-all">Очистить всё</button>
+        <button id="toggle-pause">Пауза</button>
+      </div>
+
+      <canvas id="canvas"></canvas>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
