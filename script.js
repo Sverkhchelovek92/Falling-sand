@@ -52,6 +52,14 @@ let isErasing = false
 let brushSize = 4
 let currentMaterial = 1
 
+const brushSlider = document.getElementById('brush-slider')
+let brushSliderValue = document.getElementById('brush-value')
+
+brushSlider.addEventListener('input', () => {
+  brushSize = parseInt(brushSlider.value)
+  brushSliderValue.textContent = brushSize
+})
+
 function resizeAndInit() {
   canvas.width = canvas.clientWidth
   canvas.height = canvas.clientHeight

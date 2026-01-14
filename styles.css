@@ -39,6 +39,11 @@ body {
   margin: 20px 0;
 }
 
+.section input {
+  cursor: pointer;
+  width: 100px;
+}
+
 .tools,
 .colors {
   display: flex;
