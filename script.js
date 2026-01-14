@@ -2,22 +2,35 @@ const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
 canvas.addEventListener('mousedown', (e) => {
-  isDrawing = true
-  drawAtMouse(e)
+  if (e.button === 0) {
+    isDrawing = true
+    drawAtMouse(e, 1)
+  } else if (e.button === 2) {
+    isErasing = true
+    drawAtMouse(e, 0)
+  }
+  e.preventDefault()
 })
 
 canvas.addEventListener('mousemove', (e) => {
   if (isDrawing) {
-    drawAtMouse(e)
+    drawAtMouse(e, 1)
+  } else if (isErasing) {
+    drawAtMouse(e, 0)
   }
 })
 
-canvas.addEventListener('mouseup', () => {
-  isDrawing = false
+canvas.addEventListener('mouseup', (e) => {
+  if (e.button === 0) isDrawing = false
+  if (e.button === 2) isErasing = false
 })
+
 canvas.addEventListener('mouseleave', () => {
   isDrawing = false
+  isErasing = false
 })
+
+canvas.addEventListener('contextmenu', (e) => e.preventDefault())
 
 const CELL_SIZE = 4
 
@@ -35,6 +48,7 @@ const COLORS = {
 }
 
 let isDrawing = false
+let isErasing = false
 let brushSize = 4
 let currentMaterial = 1
 
@@ -156,7 +170,7 @@ function update() {
   ;[grid, nextGrid] = [nextGrid, grid]
 }
 
-function drawAtMouse(e) {
+function drawAtMouse(e, material) {
   const rect = canvas.getBoundingClientRect()
   const mouseX = e.clientX - rect.left
   const mouseY = e.clientY - rect.top
@@ -172,7 +186,7 @@ function drawAtMouse(e) {
         const x = cellX + dx
         const y = cellY + dy
         if (x >= 0 && x < cols && y >= 0 && y < rows) {
-          grid[x][y] = currentMaterial
+          grid[x][y] = material
         }
       }
     }
