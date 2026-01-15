@@ -53,6 +53,8 @@ let brushSize = 4
 let currentMaterial = 1
 
 let selectedSandColor = 0xffc2b080
+let colorGrid
+let nextColorGrid
 
 const brushSlider = document.getElementById('brush-slider')
 let brushSliderValue = document.getElementById('brush-value')
@@ -83,7 +85,8 @@ function resizeAndInit() {
   for (let x = startX; x < endX; x++) {
     for (let y = 10; y < 20; y++) {
       if (x >= 0 && x < cols && y >= 0 && y < rows) {
-        grid[x][y] = selectedSandColor
+        grid[x][y] = 1
+        colorGrid[x][y] = selectedSandColor
       }
     }
   }
@@ -108,9 +111,11 @@ function initGrid() {
   grid = create2Darray(cols, rows)
   nextGrid = create2Darray(cols, rows)
   colorGrid = create2Darray(cols, rows)
+  nextColorGrid = create2Darray(cols, rows)
 
   for (let x = 0; x < cols; x++) {
     colorGrid[x].fill(0)
+    nextColorGrid[x].fill(0)
   }
 }
 
@@ -157,11 +162,16 @@ function render() {
 }
 
 function update() {
-  // let's copy grid to nextGrid
   for (let x = 0; x < cols; x++) {
     nextGrid[x].fill(0)
+    nextColorGrid[x].fill(0)
+  }
+
+  // let's copy grid to nextGrid
+  for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
       nextGrid[x][y] = grid[x][y]
+      nextColorGrid[x][y] = colorGrid[x][y]
     }
   }
 
@@ -174,6 +184,10 @@ function update() {
         if (y + 1 < rows && nextGrid[x][y + 1] === 0) {
           nextGrid[x][y + 1] = 1
           nextGrid[x][y] = 0
+
+          nextColorGrid[x][y + 1] = colorGrid[x][y]
+          nextColorGrid[x][y] = 0
+
           moved = true
         } else {
           const leftFirst = Math.random() < 0.5
@@ -181,6 +195,7 @@ function update() {
 
           for (const dir of directions) {
             const nx = x + dir
+
             if (
               !moved &&
               y + 1 < rows &&
@@ -190,6 +205,10 @@ function update() {
             ) {
               nextGrid[nx][y + 1] = 1
               nextGrid[x][y] = 0
+
+              nextColorGrid[nx][y + 1] = colorGrid[x][y]
+              nextColorGrid[x][y] = 0
+
               moved = true
               break
             }
@@ -198,7 +217,9 @@ function update() {
       }
     }
   }
+
   ;[grid, nextGrid] = [nextGrid, grid]
+  ;[colorGrid, nextColorGrid] = [nextColorGrid, colorGrid]
 }
 
 function drawAtMouse(e, material) {
@@ -217,7 +238,7 @@ function drawAtMouse(e, material) {
         const x = cellX + dx
         const y = cellY + dy
         if (x >= 0 && x < cols && y >= 0 && y < rows) {
-          grid[x][y] = material
+          // grid[x][y] = material
 
           if (material === 1) {
             if (grid[x][y] === 0) {
