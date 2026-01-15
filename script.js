@@ -83,7 +83,7 @@ function resizeAndInit() {
   for (let x = startX; x < endX; x++) {
     for (let y = 10; y < 20; y++) {
       if (x >= 0 && x < cols && y >= 0 && y < rows) {
-        grid[x][y] = 1
+        grid[x][y] = selectedSandColor
       }
     }
   }
@@ -107,6 +107,11 @@ function initGrid() {
 
   grid = create2Darray(cols, rows)
   nextGrid = create2Darray(cols, rows)
+  colorGrid = create2Darray(cols, rows)
+
+  for (let x = 0; x < cols; x++) {
+    colorGrid[x].fill(0)
+  }
 }
 
 function create2Darray(w, h) {
@@ -125,13 +130,15 @@ function render() {
       const cell = grid[x][y]
       if (cell === 0) continue
 
-      let color
+      let colorRaw
 
       if (cell === 1) {
-        color = toCanvasColor(selectedSandColor)
+        colorRaw = colorGrid[x][y] !== 0 ? colorGrid[x][y] : selectedSandColor
       } else {
-        color = COLORS[cell] || COLORS[0]
+        colorRaw = COLORS[cell] || COLORS[0]
       }
+
+      const color = toCanvasColor(colorRaw)
 
       const startX = x * CELL_SIZE
       const startY = y * CELL_SIZE
@@ -211,6 +218,16 @@ function drawAtMouse(e, material) {
         const y = cellY + dy
         if (x >= 0 && x < cols && y >= 0 && y < rows) {
           grid[x][y] = material
+
+          if (material === 1) {
+            if (grid[x][y] === 0) {
+              grid[x][y] = 1
+              colorGrid[x][y] = selectedSandColor
+            }
+          } else {
+            grid[x][y] = material
+            colorGrid[x][y] = 0
+          }
         }
       }
     }
