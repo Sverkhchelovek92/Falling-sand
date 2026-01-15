@@ -52,8 +52,18 @@ let isErasing = false
 let brushSize = 4
 let currentMaterial = 1
 
+let selectedSandColor = 0xffc2b080
+
 const brushSlider = document.getElementById('brush-slider')
 let brushSliderValue = document.getElementById('brush-value')
+
+function toCanvasColor(argb) {
+  const a = (argb >> 24) & 0xff
+  const r = (argb >> 16) & 0xff
+  const g = (argb >> 8) & 0xff
+  const b = argb & 0xff
+  return (a << 24) | (b << 16) | (g << 8) | r
+}
 
 brushSlider.addEventListener('input', () => {
   brushSize = parseInt(brushSlider.value)
@@ -115,7 +125,13 @@ function render() {
       const cell = grid[x][y]
       if (cell === 0) continue
 
-      const color = COLORS[cell]
+      let color
+
+      if (cell === 1) {
+        color = toCanvasColor(selectedSandColor)
+      } else {
+        color = COLORS[cell] || COLORS[0]
+      }
 
       const startX = x * CELL_SIZE
       const startY = y * CELL_SIZE
@@ -216,4 +232,20 @@ const clearAllBtn = document.getElementById('clear-all')
 clearAllBtn.addEventListener('click', () => {
   grid.forEach((col) => col.fill(0))
   nextGrid.forEach((col) => col.fill(0))
+})
+
+// Color select
+
+document.querySelectorAll('.color').forEach((el) => {
+  el.addEventListener('click', () => {
+    document
+      .querySelectorAll('.color')
+      .forEach((c) => c.classList.remove('active'))
+
+    el.classList.add('active')
+
+    selectedSandColor = Number(el.dataset.color)
+
+    console.log('Chosen color:', selectedSandColor.toString(16))
+  })
 })
