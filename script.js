@@ -209,3 +209,11 @@ function loop() {
 
 resizeAndInit()
 requestAnimationFrame(loop)
+
+// Clear all grid
+
+const clearAllBtn = document.getElementById('clear-all')
+clearAllBtn.addEventListener('click', () => {
+  grid.forEach((col) => col.fill(0))
+  nextGrid.forEach((col) => col.fill(0))
+})
