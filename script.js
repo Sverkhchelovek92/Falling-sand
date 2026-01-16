@@ -52,7 +52,7 @@ let isErasing = false
 let brushSize = 4
 let currentMaterial = 1
 
-let selectedSandColor = 0xffc2b080
+let selectedSandColor = 0xffeedaa6
 let colorGrid
 let nextColorGrid
 
