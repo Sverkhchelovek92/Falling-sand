@@ -233,23 +233,56 @@ function drawAtMouse(e, material) {
   const cellX = Math.floor(mouseX / CELL_SIZE)
   const cellY = Math.floor(mouseY / CELL_SIZE)
 
-  // let's draw
+  const cells = []
+
   for (let dx = -brushSize; dx <= brushSize; dx++) {
     for (let dy = -brushSize; dy <= brushSize; dy++) {
       if (dx * dx + dy * dy <= brushSize * brushSize) {
         const x = cellX + dx
         const y = cellY + dy
         if (x >= 0 && x < cols && y >= 0 && y < rows) {
-          // grid[x][y] = material
+          cells.push({ x, y })
+        }
+      }
+    }
+  }
 
-          if (material === 1) {
-            if (grid[x][y] === 0) {
-              grid[x][y] = 1
-              colorGrid[x][y] = selectedSandColor
+  if (shiftPressed && material === 1) {
+    const sandColors = []
+    for (const cell of cells) {
+      if (grid[cell.x][cell.y] === 1) {
+        sandColors.push(colorGrid[cell.x][cell.y])
+      }
+    }
+
+    for (let i = sandColors.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[sandColors[i], sandColors[j]] = [sandColors[j], sandColors[i]]
+    }
+
+    let colorIndex = 0
+    for (const cell of cells) {
+      if (grid[cell.x][cell.y] === 1) {
+        colorGrid[cell.x][cell.y] = sandColors[colorIndex]
+        colorIndex++
+      }
+    }
+  } else {
+    for (let dx = -brushSize; dx <= brushSize; dx++) {
+      for (let dy = -brushSize; dy <= brushSize; dy++) {
+        if (dx * dx + dy * dy <= brushSize * brushSize) {
+          const x = cellX + dx
+          const y = cellY + dy
+          if (x >= 0 && x < cols && y >= 0 && y < rows) {
+            if (material === 1) {
+              if (grid[x][y] === 0) {
+                grid[x][y] = 1
+                colorGrid[x][y] = selectedSandColor
+              }
+            } else {
+              grid[x][y] = material
+              colorGrid[x][y] = 0
             }
-          } else {
-            grid[x][y] = material
-            colorGrid[x][y] = 0
           }
         }
       }
