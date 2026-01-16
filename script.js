@@ -56,6 +56,8 @@ let selectedSandColor = 0xffeedaa6
 let colorGrid
 let nextColorGrid
 
+let shiftPressed = false
+
 const brushSlider = document.getElementById('brush-slider')
 let brushSliderValue = document.getElementById('brush-value')
 
@@ -286,4 +288,13 @@ document.querySelectorAll('.color').forEach((el) => {
 
     console.log('Chosen color:', selectedSandColor.toString(16))
   })
+})
+
+// Shift listeners
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Shift') shiftPressed = true
+})
+
+window.addEventListener('keyup', (e) => {
+  if (e.key === 'Shift') shiftPressed = false
 })
