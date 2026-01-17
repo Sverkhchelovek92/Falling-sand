@@ -53,6 +53,7 @@ let brushSize = 4
 let currentMaterial = 1
 
 let selectedSandColor = 0xffeedaa6
+let selectedBackgroundColor = 0xff222222
 let colorGrid
 let nextColorGrid
 
@@ -130,7 +131,7 @@ function create2Darray(w, h) {
 }
 
 function render() {
-  buffer.fill(COLORS[0])
+  buffer.fill(toCanvasColor(selectedBackgroundColor))
 
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
@@ -160,6 +161,7 @@ function render() {
       }
     }
   }
+
   ctx.putImageData(imageData, 0, 0)
 }
 
@@ -330,4 +332,20 @@ window.addEventListener('keydown', (e) => {
 
 window.addEventListener('keyup', (e) => {
   if (e.key === 'Shift') shiftPressed = false
+})
+
+// Background select
+document.querySelectorAll('.bg-colors .color').forEach((el) => {
+  el.addEventListener('click', () => {
+    document
+      .querySelectorAll('.bg-colors .color')
+      .forEach((c) => c.classList.remove('active'))
+    el.classList.add('active')
+
+    selectedBackgroundColor = Number(el.dataset.color)
+    console.log(
+      'Background color changed to:',
+      selectedBackgroundColor.toString(16)
+    )
+  })
 })
