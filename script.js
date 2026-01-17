@@ -311,10 +311,10 @@ clearAllBtn.addEventListener('click', () => {
 
 // Color select
 
-document.querySelectorAll('.color').forEach((el) => {
+document.querySelectorAll('.sandColor').forEach((el) => {
   el.addEventListener('click', () => {
     document
-      .querySelectorAll('.color')
+      .querySelectorAll('.sandColor')
       .forEach((c) => c.classList.remove('active'))
 
     el.classList.add('active')
@@ -335,10 +335,10 @@ window.addEventListener('keyup', (e) => {
 })
 
 // Background select
-document.querySelectorAll('.bg-colors .color').forEach((el) => {
+document.querySelectorAll('.bg-color').forEach((el) => {
   el.addEventListener('click', () => {
     document
-      .querySelectorAll('.bg-colors .color')
+      .querySelectorAll('.bg-color')
       .forEach((c) => c.classList.remove('active'))
     el.classList.add('active')
 
