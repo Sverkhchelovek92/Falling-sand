@@ -54,6 +54,7 @@ let currentMaterial = 1
 
 let selectedSandColor = 0xffeedaa6
 let selectedBackgroundColor = 0xff222222
+const WATER_COLOR = 0xff0000ff
 let colorGrid
 let nextColorGrid
 
@@ -143,7 +144,7 @@ function render() {
       if (cell === 1) {
         colorRaw = colorGrid[x][y] !== 0 ? colorGrid[x][y] : selectedSandColor
       } else if (cell === 2) {
-        colorRaw = 0xff0000ff
+        colorRaw = WATER_COLOR
       } else {
         colorRaw = COLORS[cell] || COLORS[0]
       }

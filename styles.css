@@ -97,3 +97,20 @@ button:hover {
   margin-right: 5px;
   font-weight: bold;
 }
+
+.tools {
+  display: flex;
+  gap: 2px;
+}
+.tool {
+  padding: 8px 16px;
+  background: #333;
+  border: 1px solid #555;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.tool.active {
+  background: #555;
+  border-color: #aaa;
+}
