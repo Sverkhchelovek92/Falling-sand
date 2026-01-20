@@ -174,7 +174,7 @@ function update() {
     nextColorGrid[x].fill(0)
   }
 
-  // let's copy grid to nextGrid
+  // Копируем текущее состояние
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
       nextGrid[x][y] = grid[x][y]
@@ -182,19 +182,20 @@ function update() {
     }
   }
 
-  // Update from bottom to top
+  // Обновляем снизу вверх
   for (let x = 0; x < cols; x++) {
     for (let y = rows - 2; y >= 0; y--) {
-      if (grid[x][y] === 1) {
+      // Песок (1)
+      if (nextGrid[x][y] === 1) {
+        // используем nextGrid для стабильности
         let moved = false
 
+        // Вниз
         if (y + 1 < rows && nextGrid[x][y + 1] === 0) {
           nextGrid[x][y + 1] = 1
           nextGrid[x][y] = 0
-
-          nextColorGrid[x][y + 1] = colorGrid[x][y]
+          nextColorGrid[x][y + 1] = nextColorGrid[x][y]
           nextColorGrid[x][y] = 0
-
           moved = true
         } else {
           const leftFirst = Math.random() < 0.5
@@ -202,7 +203,6 @@ function update() {
 
           for (const dir of directions) {
             const nx = x + dir
-
             if (
               !moved &&
               y + 1 < rows &&
@@ -212,18 +212,21 @@ function update() {
             ) {
               nextGrid[nx][y + 1] = 1
               nextGrid[x][y] = 0
-
-              nextColorGrid[nx][y + 1] = colorGrid[x][y]
+              nextColorGrid[nx][y + 1] = nextColorGrid[x][y]
               nextColorGrid[x][y] = 0
-
               moved = true
               break
             }
           }
         }
-      } else if (grid[x][y] === 2) {
+      }
+
+      // Вода (2) — отдельно
+      if (nextGrid[x][y] === 2) {
+        // используем nextGrid, чтобы не мешать другим типам
         let moved = false
 
+        // Вниз (быстрее, 2 шага)
         if (y + 1 < rows && nextGrid[x][y + 1] === 0) {
           nextGrid[x][y + 1] = 2
           nextGrid[x][y] = 0
@@ -238,36 +241,43 @@ function update() {
           moved = true
         }
 
+        // Растекание
         if (!moved) {
-          const dirs = [-1, 1]
-          const dir = dirs[Math.floor(Math.random() * 2)]
+          const leftFirst = Math.random() < 0.5
+          const directions = leftFirst ? [-1, 1] : [1, -1]
 
-          if (
-            y + 1 < rows &&
-            x + dir >= 0 &&
-            x + dir < cols &&
-            nextGrid[x + dir][y + 1] === 0
-          ) {
-            nextGrid[x + dir][y + 1] = 2
-            nextGrid[x][y] = 0
-            moved = true
+          for (const dir of directions) {
+            const nx = x + dir
+            if (
+              !moved &&
+              y + 1 < rows &&
+              nx >= 0 &&
+              nx < cols &&
+              nextGrid[nx][y + 1] === 0
+            ) {
+              nextGrid[nx][y + 1] = 2
+              nextGrid[x][y] = 0
+              moved = true
+              break
+            }
           }
 
-          if (
-            !moved &&
-            x + dir >= 0 &&
-            x + dir < cols &&
-            nextGrid[x + dir][y] === 0
-          ) {
-            nextGrid[x + dir][y] = 3
-            nextGrid[x][y] = 0
-            moved = true
+          // Горизонтально, если всё ещё не двинулась
+          for (const dir of directions) {
+            const nx = x + dir
+            if (!moved && nx >= 0 && nx < cols && nextGrid[nx][y] === 0) {
+              nextGrid[nx][y] = 2
+              nextGrid[x][y] = 0
+              moved = true
+              break
+            }
           }
         }
       }
     }
   }
 
+  // Меняем местами
   ;[grid, nextGrid] = [nextGrid, grid]
   ;[colorGrid, nextColorGrid] = [nextColorGrid, colorGrid]
 }
