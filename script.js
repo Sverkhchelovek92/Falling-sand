@@ -193,6 +193,49 @@ function update() {
           nextColorGrid[x][y] = 0
 
           moved = true
+        } else if (grid[x][y] === 2) {
+          let moved = false
+
+          if (y + 1 < rows && nextGrid[x][y + 1] === 0) {
+            nextGrid[x][y + 1] = 2
+            nextGrid[x][y] = 0
+            moved = true
+          } else if (
+            y + 2 < rows &&
+            nextGrid[x][y + 1] !== 0 &&
+            nextGrid[x][y + 2] === 0
+          ) {
+            nextGrid[x][y + 2] = 2
+            nextGrid[x][y] = 0
+            moved = true
+          }
+
+          if (!moved) {
+            const dirs = [-1, 1]
+            const dir = dirs[Math.floor(Math.random() * 2)]
+
+            if (
+              y + 1 < rows &&
+              x + dir >= 0 &&
+              x + dir < cols &&
+              nextGrid[x + dir][y + 1] === 0
+            ) {
+              nextGrid[x + dir][y + 1] = 2
+              nextGrid[x][y] = 0
+              moved = true
+            }
+
+            if (
+              !moved &&
+              x + dir >= 0 &&
+              x + dir < cols &&
+              nextGrid[x + dir][y] === 0
+            ) {
+              nextGrid[x + dir][y] = 3
+              nextGrid[x][y] = 0
+              moved = true
+            }
+          }
         } else {
           const leftFirst = Math.random() < 0.5
           const directions = leftFirst ? [-1, 1] : [1, -1]
@@ -345,7 +388,7 @@ document.querySelectorAll('.bg-color').forEach((el) => {
     selectedBackgroundColor = Number(el.dataset.color)
     console.log(
       'Background color changed to:',
-      selectedBackgroundColor.toString(16)
+      selectedBackgroundColor.toString(16),
     )
   })
 })
