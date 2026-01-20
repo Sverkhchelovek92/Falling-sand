@@ -4,7 +4,7 @@ const ctx = canvas.getContext('2d')
 canvas.addEventListener('mousedown', (e) => {
   if (e.button === 0) {
     isDrawing = true
-    drawAtMouse(e, 1)
+    drawAtMouse(e, currentMaterial)
   } else if (e.button === 2) {
     isErasing = true
     drawAtMouse(e, 0)
@@ -14,7 +14,7 @@ canvas.addEventListener('mousedown', (e) => {
 
 canvas.addEventListener('mousemove', (e) => {
   if (isDrawing) {
-    drawAtMouse(e, 1)
+    drawAtMouse(e, currentMaterial)
   } else if (isErasing) {
     drawAtMouse(e, 0)
   }
@@ -315,28 +315,23 @@ function drawAtMouse(e, material) {
         colorIndex++
       }
     }
-  } else if (material === 2) {
-    if (grid[x][y] === 0) {
-      grid[x][y] = 2
-    }
   } else {
-    for (let dx = -brushSize; dx <= brushSize; dx++) {
-      for (let dy = -brushSize; dy <= brushSize; dy++) {
-        if (dx * dx + dy * dy <= brushSize * brushSize) {
-          const x = cellX + dx
-          const y = cellY + dy
-          if (x >= 0 && x < cols && y >= 0 && y < rows) {
-            if (material === 1) {
-              if (grid[x][y] === 0) {
-                grid[x][y] = 1
-                colorGrid[x][y] = selectedSandColor
-              }
-            } else {
-              grid[x][y] = material
-              colorGrid[x][y] = 0
-            }
-          }
+    for (const cell of cells) {
+      const x = cell.x
+      const y = cell.y
+
+      if (material === 1) {
+        if (grid[x][y] === 0) {
+          grid[x][y] = 1
+          colorGrid[x][y] = selectedSandColor
         }
+      } else if (material === 2) {
+        if (grid[x][y] === 0) {
+          grid[x][y] = 2
+        }
+      } else {
+        grid[x][y] = 0
+        colorGrid[x][y] = 0
       }
     }
   }
@@ -397,5 +392,16 @@ document.querySelectorAll('.bg-color').forEach((el) => {
       'Background color changed to:',
       selectedBackgroundColor.toString(16),
     )
+  })
+})
+
+// Water select
+document.querySelectorAll('.tool').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    document
+      .querySelectorAll('.tool')
+      .forEach((b) => b.classList.remove('active'))
+    btn.classList.add('active')
+    currentMaterial = parseInt(btn.dataset.material)
   })
 })
