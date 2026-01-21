@@ -174,7 +174,7 @@ function update() {
     nextColorGrid[x].fill(0)
   }
 
-  // Копируем текущее состояние
+  // let's copy grid to nextGrid
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
       nextGrid[x][y] = grid[x][y]
@@ -182,15 +182,14 @@ function update() {
     }
   }
 
-  // Обновляем снизу вверх
+  // Update from bottom to top
   for (let x = 0; x < cols; x++) {
     for (let y = rows - 2; y >= 0; y--) {
-      // Песок (1)
+      // Sand (1)
       if (nextGrid[x][y] === 1) {
-        // используем nextGrid для стабильности
         let moved = false
 
-        // Вниз
+        // Down
         if (y + 1 < rows && nextGrid[x][y + 1] === 0) {
           nextGrid[x][y + 1] = 1
           nextGrid[x][y] = 0
@@ -221,12 +220,10 @@ function update() {
         }
       }
 
-      // Вода (2) — отдельно
+      // Water (2)
       if (nextGrid[x][y] === 2) {
-        // используем nextGrid, чтобы не мешать другим типам
         let moved = false
 
-        // Вниз (быстрее, 2 шага)
         if (y + 1 < rows && nextGrid[x][y + 1] === 0) {
           nextGrid[x][y + 1] = 2
           nextGrid[x][y] = 0
@@ -241,7 +238,6 @@ function update() {
           moved = true
         }
 
-        // Растекание
         if (!moved) {
           const leftFirst = Math.random() < 0.5
           const directions = leftFirst ? [-1, 1] : [1, -1]
@@ -262,7 +258,6 @@ function update() {
             }
           }
 
-          // Горизонтально, если всё ещё не двинулась
           for (const dir of directions) {
             const nx = x + dir
             if (!moved && nx >= 0 && nx < cols && nextGrid[nx][y] === 0) {
@@ -277,7 +272,6 @@ function update() {
     }
   }
 
-  // Меняем местами
   ;[grid, nextGrid] = [nextGrid, grid]
   ;[colorGrid, nextColorGrid] = [nextColorGrid, colorGrid]
 }
@@ -377,6 +371,15 @@ document.querySelectorAll('.sandColor').forEach((el) => {
     selectedSandColor = Number(el.dataset.color)
 
     console.log('Chosen color:', selectedSandColor.toString(16))
+
+    currentMaterial = 1
+
+    document.querySelectorAll('.tool').forEach((btn) => {
+      btn.classList.remove('active')
+      if (btn.dataset.material === '1') {
+        btn.classList.add('active')
+      }
+    })
   })
 })
 
