@@ -54,7 +54,7 @@ let currentMaterial = 1
 
 let selectedSandColor = 0xffeedaa6
 let selectedBackgroundColor = 0xff222222
-const WATER_COLOR = 0xff0000ff
+let selectedWaterColor = 0xff0000ff
 let colorGrid
 let nextColorGrid
 
@@ -144,7 +144,7 @@ function render() {
       if (cell === 1) {
         colorRaw = colorGrid[x][y] !== 0 ? colorGrid[x][y] : selectedSandColor
       } else if (cell === 2) {
-        colorRaw = WATER_COLOR
+        colorRaw = selectedWaterColor
       } else {
         colorRaw = COLORS[cell] || COLORS[0]
       }
@@ -416,5 +416,23 @@ document.querySelectorAll('.tool').forEach((btn) => {
       .forEach((b) => b.classList.remove('active'))
     btn.classList.add('active')
     currentMaterial = parseInt(btn.dataset.material)
+  })
+})
+
+document.querySelectorAll('.waterColor').forEach((el) => {
+  el.addEventListener('click', () => {
+    document
+      .querySelectorAll('.waterColor')
+      .forEach((c) => c.classList.remove('active'))
+    el.classList.add('active')
+
+    selectedWaterColor = Number(el.dataset.color)
+    console.log('Water color chosen:', selectedWaterColor.toString(16))
+
+    currentMaterial = 2
+    document.querySelectorAll('.tool').forEach((btn) => {
+      btn.classList.remove('active')
+      if (btn.dataset.material === '2') btn.classList.add('active')
+    })
   })
 })
