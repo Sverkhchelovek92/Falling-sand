@@ -224,24 +224,33 @@ function update() {
       if (nextGrid[x][y] === 2) {
         let moved = false
 
+        // falling down
         if (y + 1 < rows && nextGrid[x][y + 1] === 0) {
           nextGrid[x][y + 1] = 2
           nextGrid[x][y] = 0
+          nextColorGrid[x][y + 1] = colorGrid[x][y]
+          nextColorGrid[x][y] = 0
           moved = true
-        } else if (
+        }
+        // falling down (2 pixels)
+        else if (
           y + 2 < rows &&
           nextGrid[x][y + 1] !== 0 &&
           nextGrid[x][y + 2] === 0
         ) {
           nextGrid[x][y + 2] = 2
           nextGrid[x][y] = 0
+          nextColorGrid[x][y + 2] = colorGrid[x][y]
+          nextColorGrid[x][y] = 0
           moved = true
         }
 
+        // Falling sideways
         if (!moved) {
           const leftFirst = Math.random() < 0.5
           const directions = leftFirst ? [-1, 1] : [1, -1]
 
+          // Downside
           for (const dir of directions) {
             const nx = x + dir
             if (
@@ -253,16 +262,21 @@ function update() {
             ) {
               nextGrid[nx][y + 1] = 2
               nextGrid[x][y] = 0
+              nextColorGrid[nx][y + 1] = colorGrid[x][y]
+              nextColorGrid[x][y] = 0
               moved = true
               break
             }
           }
 
+          // Horizontal
           for (const dir of directions) {
             const nx = x + dir
             if (!moved && nx >= 0 && nx < cols && nextGrid[nx][y] === 0) {
               nextGrid[nx][y] = 2
               nextGrid[x][y] = 0
+              nextColorGrid[nx][y] = colorGrid[x][y]
+              nextColorGrid[x][y] = 0
               moved = true
               break
             }
