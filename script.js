@@ -332,6 +332,7 @@ function drawAtMouse(e, material) {
       } else if (material === 2) {
         if (grid[x][y] === 0) {
           grid[x][y] = 2
+          colorGrid[x][y] = selectedWaterColor
         }
       } else {
         grid[x][y] = 0
