@@ -144,7 +144,7 @@ function render() {
       if (cell === 1) {
         colorRaw = colorGrid[x][y] !== 0 ? colorGrid[x][y] : selectedSandColor
       } else if (cell === 2) {
-        colorRaw = selectedWaterColor
+        colorRaw = colorGrid[x][y] !== 0 ? colorGrid[x][y] : selectedWaterColor
       } else {
         colorRaw = COLORS[cell] || COLORS[0]
       }
@@ -228,7 +228,7 @@ function update() {
         if (y + 1 < rows && nextGrid[x][y + 1] === 0) {
           nextGrid[x][y + 1] = 2
           nextGrid[x][y] = 0
-          nextColorGrid[x][y + 1] = colorGrid[x][y]
+          nextColorGrid[x][y + 1] = nextColorGrid[x][y]
           nextColorGrid[x][y] = 0
           moved = true
         }
@@ -240,7 +240,7 @@ function update() {
         ) {
           nextGrid[x][y + 2] = 2
           nextGrid[x][y] = 0
-          nextColorGrid[x][y + 2] = colorGrid[x][y]
+          nextColorGrid[x][y + 2] = nextColorGrid[x][y]
           nextColorGrid[x][y] = 0
           moved = true
         }
@@ -262,7 +262,7 @@ function update() {
             ) {
               nextGrid[nx][y + 1] = 2
               nextGrid[x][y] = 0
-              nextColorGrid[nx][y + 1] = colorGrid[x][y]
+              nextColorGrid[nx][y + 1] = nextColorGrid[x][y]
               nextColorGrid[x][y] = 0
               moved = true
               break
@@ -275,12 +275,17 @@ function update() {
             if (!moved && nx >= 0 && nx < cols && nextGrid[nx][y] === 0) {
               nextGrid[nx][y] = 2
               nextGrid[x][y] = 0
-              nextColorGrid[nx][y] = colorGrid[x][y]
+              nextColorGrid[nx][y] = nextColorGrid[x][y]
               nextColorGrid[x][y] = 0
               moved = true
               break
             }
           }
+        }
+
+        if (moved) {
+          nextGrid[x][y] = 0
+          nextColorGrid[x][y] = 0
         }
       }
     }
